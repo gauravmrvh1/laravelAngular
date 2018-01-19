@@ -1,0 +1,111 @@
+.storePicDiv .storePicBox{border: solid 2px #333;margin-top: 5px; height: 200px;overflow: hidden;text-align: center;}
+.storePicDiv .storePicBox img{max-width: 100%;margin: 0 auto;}
+.storePicDiv .storePicBox .rmvBtn{position: absolute;height: 37px;width: 37px; z-index: 1;right: -1px;top: -3px;}
+.storePicDiv .storePicBox .rmvBtn i{font-size: 38px;cursor: pointer;}
+.storePicBox .fileUpload {
+    position: absolute;
+    bottom: 0;
+    overflow: hidden;
+    margin: 10px;
+}
+.storePicBox .fileUpload input.storePicUpload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+div.gallery img{max-width: 130px;margin-right: 5px;border:solid 2px #333;}
+.storePicBox .imageThumb {
+  max-height: 115px;
+  border: 2px solid;
+  padding: 1px;
+  cursor: pointer;
+}
+.storePicBox .storePics {
+  display: inline-block;
+  margin: 10px 10px 0 0;
+}
+.storePicBox .remove {
+  display: block;
+  background: #444;
+  border: 1px solid black;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+.storePicBox .remove:hover {
+  background: white;
+  color: black;
+}
+@media (min-width: 992px){
+    .typo-line{
+        padding-left: 140px;
+        margin-bottom: 40px;
+        position: relative;
+    }
+
+    .typo-line .category{
+        transform: translateY(-50%);
+        top: 50%;
+        left: 0px;
+        position: absolute;
+    }
+}
+
+.all-icons [class*="pe-"]{
+    font-size: 40px;
+}
+.all-icons input{
+    border: 0;
+}
+.all-icons .font-icon-detail{
+    text-align: center;
+    padding: 45px 0px 30px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+.all-icons .font-icon-detail input{
+    margin: 25px auto 0;
+    width: 100%;
+    text-align: center;
+    display: block;
+    color: #aaa;
+    font-size: 13px;
+}
+
+#map{
+    position:relative;
+    width:100%;
+    height: calc(100% - 60px);
+}
+
+.places-buttons .btn{
+    margin-bottom: 30px
+}
+.sidebar .nav > li.active-pro{
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}
+.sidebar .nav > li.active-pro a{
+    background: rgba(255, 255, 255, 0.14);
+    opacity: 1;
+    color: #FFFFFF;
+}
+
+.table-upgrade td:nth-child(2),
+.table-upgrade td:nth-child(3){
+    text-align: center;
+}
+
+@media all and (max-width: 991px)  {
+    .sidebar .nav > li.active-pro{
+        position: initial;
+    }
+}
