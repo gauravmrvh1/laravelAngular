@@ -22,50 +22,21 @@ class AdminController extends Controller
 {
 	
 	public function login( Request $request ) {
-		return $request->all();
 		$email         = $request->email;
 		$password      = $request->password;
-		$remember      = $request->remember;
-		$AdminloggedIn = Session::get( 'AdminloggedIn' );
-		$adminId = Session::get('AdminId');
-		// session::pull('AdminloggedIn');
-		if( $request->method() == 'GET' ) {
-			if( empty( $AdminloggedIn ) ) {
-				return view('Admin/login');
-			} else {
-				return redirect('Admin/dashboard');
-			}
-		} else if( $request->method() == 'POST' ) {
-
-			// dd($password);
-			$adminDetail = Admin::getAdminDetail( null , $email , $password);
-			// dd($adminDetail);
-			if( count( $adminDetail ) ) {
-				$sessionData =[
-					'AdminloggedIn' => 'true',
-					'AdminId' => $adminDetail->id,
-					'Type' => $adminDetail->type,
-				];
-				if($remember=='on') {
-					 setcookie('mai_AdminEmail',$adminDetail->email, time() + (86400 * 30), "/");
-					 setcookie('mai_AdminPassword',$adminDetail->password, time() + (86400 * 30), "/");
-					 setcookie('mai_AdminRemember','on',time() + (86400 * 30), "/");
-				}
-				if($remember!='on') {
-					  setcookie('mai_AdminEmail', null, -1, '/');
-					  setcookie('mai_AdminPassword', null, -1, '/');
-					  setcookie('mai_AdminRemember', null, -1, '/');
-				}
-				session($sessionData);
-				return redirect('Admin/dashboard');
-			} else {
-				return redirect('Admin/login')  
-					   ->with('invalidAdminCred','Invalid Credentials')
-					   ->withInput();
-			}
-		} else {
-			return view('Admin/login');
-		}
+		$adminDetail = Admin::getAdminDetail( null , $email , $password);
+		if( count( $adminDetail ) ) {
+			$response = [
+				'message' => 'success',
+				'response' => $adminDetail,
+			];
+			return response()->json($response, 200);
+		}else{
+ 			$response = [
+				'message' =>  'invalid'
+			];
+			return response()->json($response,400);
+ 		}
 	}
 
 	public function dashboard() {
@@ -282,48 +253,23 @@ class AdminController extends Controller
 	}
 
 	public function changePassword( Request $request ) {
-		$oldPassword = $request->oldPassword;
-		$newPassword = $request->newPassword;
-		$confirnmPassword = $request->confirnmPassword;
-		$adminDetail = Admin::getAdminDetail( null ,null , $oldPassword);
-		$AdminloggedIn = Session::get( 'AdminloggedIn' );
-		$adminId = Session::get('AdminId');
+		$old_password = $request->old_password;
+		$new_password = $request->new_password;
+		$admin_id = $request->admin_id;
 
-		if( $request->method() == 'GET' ) {
-			if( empty( $AdminloggedIn ) ) {
-				return view('Admin/login');
-			} else {
-				// dd($AdminloggedIn);
-				return view('Admin/changePassword' ,compact('adminDetail'));
-			}
-		} else if( $request->method() == 'POST' ) {
-			$validations = [
-				'oldPassword'      => 'required|min:8',
-				'newPassword'      => 'required|min:8',
-				'confirnmPassword' => 'required|same:newPassword',
-			];
-			$validator = Validator::make($request->all(),$validations);
-			if( $validator->fails() ) {
-				return redirect('Admin/changePassword')  
-				   ->withErrors( $validator )
-				   ->withInput();
-			} else {
-				if( count($adminDetail) ){
-					$AdminDetail = [ 'password' => $newPassword];
-					$up = DB::table('admin')
-						->where('id',$adminId)
-						->update($AdminDetail);
-					return redirect('Admin/changePassword')  
-				   ->with('passwordUpdated','password updated successfully.');
-					
-				} else {
-					return redirect('Admin/changePassword')  
-					   ->with('invalidoldPassword','invalid old password.')
-					   ->withInput();
-				}
-			}
-		} else {
-			return view('Admin/login');
+		$adminDetail = Admin::getAdminDetail( $admin_id , null , null);
+
+		if( count($adminDetail) ){
+			$AdminDetail = [ 'password' => $new_password];
+			$up = DB::table('admin')
+				->where('id',$admin_id)
+				->update($AdminDetail);
+			$response = [
+				'message' => 'Password updated successfully.',
+				'response' => Admin::getAdminDetail( $admin_id , null , null)
+			];				
+			return response()->json($response,200);
+			
 		}
 	}
 

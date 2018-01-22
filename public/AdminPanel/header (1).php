@@ -96,6 +96,7 @@
         </div>
       </div>
     </div>
+    
     <div class="layout-main">
       <div class="layout-sidebar">
         <div class="layout-sidebar-backdrop"></div>

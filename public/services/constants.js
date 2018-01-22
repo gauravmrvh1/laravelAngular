@@ -6,6 +6,8 @@ app.service('constants', function() {
     this.loginEmailValidMsg = "Please enter the valid email address";
     this.loginPasswordValidMsg = "Length of password must be between 8 to 15";
     this.oldPasswordMissingMsg = "Please enter old password";
+    this.oldPasswordIncorrectMsg = "Old password is incorrect.";
+
     this.newPasswordMissingMsg = "Please enter new password";
     this.confirmPasswordMissingMsg = "Please enter password to confirm";
     this.passwordMismatch = "New password and confirm password did not match";

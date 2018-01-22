@@ -6,7 +6,7 @@
           <img class="img-responsive" src="/AdminPanel/img/logo.png" alt="logo">
         </a>
         <div class="login-form">
-          <form data-toggle="validator" autocomplete="off">
+          <form data-toggle="validator">
             <div class="form-group">
               <label for="email">Email</label>
               <input id="email" class="form-control" ng-model="loginEmail" type="text" name="loginEmail">
@@ -25,7 +25,7 @@
                 <span class="custom-control-label">Keep me signed in</span>
               </label>
             </div>
-            <button class="btn btn-primary btn-block" ng-click="loginFunction()" type="submit">Sign in</button>
+            <button class="btn btn-primary btn-block" ng-click="loginFunction()">Sign in</button>
           </form>
         </div>
       </div>

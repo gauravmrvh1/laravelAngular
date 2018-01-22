@@ -1,18 +1,14 @@
 
 
 
-app.controller('login',['$scope','constants','API_URL','httpService',function($scope,constants,API_URL,httpService){
+app.controller('login',['$scope','$window','constants','$http','API_URL','httpService'
+    ,function($scope,$window,constants,$http,API_URL,httpService,$location){
 	// $scope.email = 'Gauravmrvh1@gmail.com';
 	// $scope.password = 'Gauravmrvh1@gmail.com';
-
-
 	$scope.loginFunction = function(){
-
 		// console.log('gaurav');
-
 		// console.log($scope.loginEmail);
 		// console.log($scope.loginPassword);
-		
 		var loginEmail = $scope.loginEmail;
 		var loginPassword = $scope.loginPassword; 
 
@@ -48,12 +44,30 @@ app.controller('login',['$scope','constants','API_URL','httpService',function($s
      	parameters.email = loginEmail;
      	parameters.password = loginPassword;
 
-     	console.log(API_URL + 'api/login');
+     	console.log(API_URL + 'api/login_post');
      	
-     	httpService.post(API_URL + 'api/login' , parameters)
+        /*$http({
+          method: 'POST',
+          url: API_URL + 'api/login_post',
+          data : parameters
+        }).then(function successCallback(response) {
+            console.log(response);
+        }, function errorCallback(response) {
+            
+        });*/
+
+     	$http.post(API_URL + 'api/login_post' , parameters)
      		.then(function(response){
-     			console.log(response);
-     		},function err(){
+                console.log(response.status);
+                if(response.status == 200){
+                    console.log('++++++++++',response.data.response);
+                    localStorage.setItem('Mai', JSON.stringify(response.data.response));
+                    $window.location.href = API_URL+'#/index';;
+                }else{
+                    console.log('Error');
+                }
+
+     		},function myError(){
 
      		});
 	}

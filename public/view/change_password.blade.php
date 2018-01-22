@@ -14,37 +14,42 @@
 
         <div class="row gutter-xs">
 
-
-            <div class="col-md-8 card panel-body  " id="">
+            <div class="col-md-8 card panel-body" >
                 <div class="col-sm-12 col-md-12">
 
                     <div class="demo-form-wrapper">
                         <form class="form form-horizontal">
+                            <span class="response_message"></span>
                             <div class="form-group">
                                 <div class="col-md-8">
                                     <label for="" class=" control-label">Old Password</label>
 
-                                    <input id="" class="form-control" type="password">
+                                    <input id="" class="form-control old_password" ng-model="old_password" type="password">
+                                    <span ng-show="old_password_err" style="color:red"><%oldPasswordMissingMsg%></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-8">
                                     <label for="" class=" control-label">New Password</label>
 
-                                    <input id="" class="form-control" type="password">
+                                    <input id="" class="form-control" type="password" ng-model="new_password">
+                                    <span ng-show="new_password_err" style="color:red"><%new_password_err%></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-8">
                                     <label for="" class=" control-label">Confirm Password</label>
 
-                                    <input id="" class="form-control" type="password">
+                                    <input id="" class="form-control" type="password" ng-model="confirm_password">
+                                    <span ng-show="confirm_password_err" style="color:red"><%confirm_password_err%>
+                                        
+                                    </span>
                                 </div>
                             </div>
-                          
+
                             <div class="form-group">
                                 <div class=" col-sm-8  col-md-8 ">
-                                    <button class="btn btn-primary btn-block " type="submit">Submit</button>
+                                    <button class="btn btn-primary btn-block " ng-click="change_password()" type="submit">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -63,4 +68,3 @@
     </div>
 </div>
 </div>
-
