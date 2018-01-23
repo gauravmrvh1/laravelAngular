@@ -23,19 +23,19 @@ Route::get('login' , 'AdminController@login');
 Route::post('login_post' , 'AdminController@login');
 
 Route::post('changePassword' , 'AdminController@changePassword');
+Route::post('editProfile' , 'AdminController@editProfile');
+Route::post('user_list' , 'AdminController@user_list');
+Route::post('update_user_status','AdminController@update_user_status');
+Route::post('merchant_list' , 'AdminController@merchant_list');
 
 
 Route::match( ['get' , 'post'] , 'dashboard' , 'AdminController@dashboard');
-Route::match( ['get' , 'post'] , 'merchant_list' , 'AdminController@merchant_list');
-Route::match( ['get' , 'post'] , 'user_list' , 'AdminController@user_list');
 Route::get( 'logout' , 'AdminController@logout');
 
 
 Route::get( 'profile' , 'AdminController@profile');
-Route::match( ['get' , 'post'] , 'editProfile' , 'AdminController@editProfile');
 Route::match(['get','post'],'voucher_list','AdminController@voucher_list');
 Route::match(['get','post'],'update_voucher_status/{voucher_id}/{status}','AdminController@update_voucher_status');
-Route::match(['get','post'],'update_user_status/{user_id}/{status}','AdminController@update_user_status');
 Route::match(['get','post'],'update_merchant_status/{merchant_id}/{status}','AdminController@update_merchant_status');
 
 

@@ -7,6 +7,9 @@ use DB;
 
 class Admin extends Model
 {
+
+    protected $table = 'admin';
+     
     public static function getAdminDetail( $adminId = null ,$email = null , $password = null ) {
     	$data = DB::table( 'admin' );
 		if( !empty($adminId) ) {

@@ -19,6 +19,15 @@ app.config(["$routeProvider","$interpolateProvider",function($routeProvider,$int
 	}).when('/change-password',{
 		templateUrl : '/view/change_password.blade.php',
 		controller : 'change_password'
+	}).when('/edit-profile',{
+		templateUrl : '/view/edit_profile.blade.php',
+		controller : 'profile'
+	}).when('/user-list',{
+		templateUrl : '/view/user_list.blade.php',
+		controller : 'user_list'
+	}).when('/merchant-list',{
+		templateUrl : '/view/merchant_list.blade.php',
+		controller : 'merchant_list'
 	});
 	
 	// console.log('ssdfsd');
@@ -30,11 +39,12 @@ app.config(["$routeProvider","$interpolateProvider",function($routeProvider,$int
 app.run(['$rootScope', '$window', 'API_URL', function($rootScope , $window, API_URL) {
     
    $rootScope.$on('$routeChangeSuccess', function (e, current, pre) {
-
     	console.log(current);
     	console.log(current.$$route.originalPath);
     	console.log("============LocalStorage Data==================================");
 		console.log(localStorage.getItem('Mai'));
+		console.log("----------------------Route Scope Data--------------------------------------------");
+		console.log($rootScope.adminDetails);
 
 		if(current != undefined){
 		   var fullRoute = current.$$route.originalPath;

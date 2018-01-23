@@ -24,11 +24,14 @@
 	  	<script src="{{url('Controllers/app.js')}}"></script>
 		<script src="{{url('Controllers/login.js')}}"></script>
 		<script src="{{url('Controllers/logout.js')}}"></script>
+		<script src="{{url('Controllers/user_list.js')}}"></script>
+		<script src="{{url('Controllers/merchant.js')}}"></script>
 		<script src="{{url('Controllers/profile.js')}}"></script>
 		<script src="{{url('Controllers/change_password.js')}}"></script>
 		<script src="{{url('Controllers/index.js')}}"></script>
 		<script src="{{url('/services/constants.js')}}"></script>
 		<script src="{{url('/services/httpService.js')}}"></script>
+		<script src="{{url('/directives/imageDirective.js')}}"></script>
 
 
 	</head>
@@ -78,7 +81,8 @@
 
 		                    <li class="dropdown hidden-xs">
 		                        <button class="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
-		                            <img class="rounded" width="36" height="36" src="/AdminPanel/img/0180441436.jpg" alt="Teddy Wilson"> Teddy Wilson
+
+		                            <img class="rounded" width="36" height="36" src="<%admin_image?admin_image:'/AdminPanel/img/0180441436.jpg'%>"> Teddy Wilson
 		                            <span class="caret"></span>
 		                        </button>
 		                        <ul class="dropdown-menu dropdown-menu-right">
@@ -121,32 +125,32 @@
 
                             <li class="sidenav-heading">Navigation</li>
                             <li class="sidenav-item dashboardPageNav">
-                                <a href="index.php" aria-haspopup="true">
+                                <a href="#/profile" aria-haspopup="true">
                                     <span class="sidenav-icon icon icon-money"></span>
                                     <span class="sidenav-label">Dashboard</span>
                                 </a>
 
                             </li>
                             <li class="sidenav-item profilePageNav">
-                                <a href="profile.php" aria-haspopup="true">
+                                <a href="#/profile" aria-haspopup="true">
                                     <span class="sidenav-icon icon icon-user"></span>
                                     <span class="sidenav-label">Profile</span>
                                 </a>
                             </li>
                             <li class="sidenav-item userListNav">
-                                <a href="userList.php" aria-haspopup="true">
+                                <a href="#/user-list" aria-haspopup="true">
                                     <span class="sidenav-icon icon icon-users"></span>
                                     <span class="sidenav-label"> User List </span>
                                 </a>
                             </li>
                             <li class="sidenav-item orgListPageNav">
-                                <a href="merchantDetail.php" aria-haspopup="true">
+                                <a href="#/merchant-list" aria-haspopup="true">
                                     <span class="sidenav-icon icon icon-list-ol"></span>
                                     <span class="sidenav-label"> Merchant list </span>
                                 </a>
                             </li>
                             <li class="sidenav-item voucherListPageNav">
-                                <a href="voucherList.php" aria-haspopup="true">
+                                <a href="#/profile" aria-haspopup="true">
                                     <span class="sidenav-icon icon icon-list-ol"></span>
                                     <span class="sidenav-label"> Voucher list </span>
                                 </a>

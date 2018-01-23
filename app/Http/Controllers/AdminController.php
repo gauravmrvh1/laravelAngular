@@ -26,9 +26,26 @@ class AdminController extends Controller
 		$password      = $request->password;
 		$adminDetail = Admin::getAdminDetail( null , $email , $password);
 		if( count( $adminDetail ) ) {
+			$photo = null;
+			if($adminDetail->photo){
+				$photo = url('').'/'.'adminImages/'.$adminDetail->photo;
+			}
+			$result = [
+				'id' => $adminDetail->id,
+				'name' => $adminDetail->name,
+				'email' => $adminDetail->email,
+				'photo' => $photo,
+				'mobile' => $adminDetail->mobile,
+				'location' => $adminDetail->location,
+				'aboutMe' => $adminDetail->aboutMe,
+				'address' => $adminDetail->address,
+				'password' => $adminDetail->password,
+				'type' => $adminDetail->type,
+				'status' => $adminDetail->status,
+			];
 			$response = [
 				'message' => 'success',
-				'response' => $adminDetail,
+				'response' => $result,
 			];
 			return response()->json($response, 200);
 		}else{
@@ -52,29 +69,22 @@ class AdminController extends Controller
 	}
 
 	public function merchant_list( Request $request ) {
-		$AdminloggedIn = Session::get( 'AdminloggedIn' );
-		$adminId = Session::get('AdminId');
-		$adminDetail = Admin::getAdminDetail( $adminId ,null , null);
-		if( !empty( $AdminloggedIn ) ) {
-			$merchant_list = User::where(['user_type' => 2 ,'complete_profile_status' => 1])->get(); // merchant with blocked user havid status 0
+		$merchant_list = User::where(['user_type' => 2 ,'complete_profile_status' => 1])->get(); // merchant with blocked user havid status 0
 			// return $merchant_list;
-			return view('Admin/merchantDetail',compact('adminDetail','merchant_list'));
-		} else {
-			return redirect('Admin/login');
-		}
+		$response = [
+			'message' => 'Merchant list',
+			'response' => $merchant_list
+		];	
+		return response()->json($response,200);
 	}
 
 	public function user_list( Request $request ) {
-		$AdminloggedIn = Session::get( 'AdminloggedIn' );
-		$adminId = Session::get('AdminId');
-		$adminDetail = Admin::getAdminDetail( $adminId ,null , null);
-		if( !empty( $AdminloggedIn ) ) {
-			$user_list = User::where(['user_type' => 1])->get(); // merchant with blocked user havid status 0
-			// return $user_list;
-			return view('Admin/userList',compact('adminDetail','user_list'));
-		} else {
-			return redirect('Admin/login');
-		}
+		$user_list = User::where(['user_type' => 1])->get(); // merchant with blocked user havid status 0
+		$response = [
+			'message' => 'user list',
+			'response' => $user_list
+		];	
+		return response()->json($response,200);
 	}
 
 	public function profile( Request $request ) {
@@ -91,72 +101,89 @@ class AdminController extends Controller
 	}
 
 	public function editProfile( Request $request ) {
-		$AdminloggedIn = Session::get( 'AdminloggedIn' );
-		$adminId = Session::get('AdminId');
+		$address = $request->address;
+		$about = $request->about;
 		$email = $request->email;
 		$phone = $request->phone;
-		$photo = $request->file('photo');
-		$destinationPathOfProfile = public_path().'/'.'adminImages/';
 		$location = $request->location;
-		$aboutMe = $request->aboutMe;
-		$address = $request->address;
-		$adminDetail = Admin::getAdminDetail( $adminId , null ,null );
-		if( $request->method() == 'GET' ) {
-			if( empty( $AdminloggedIn ) ) {
+		$photo = $request->file('photo');
+		$adminId = $request->admin_id;
+		$destinationPathOfProfile = public_path().'/'.'adminImages/';
 
-				return view('Admin/login' , compact('adminDetail'));
-			} else {
+		$AdminDetail = [ 
+			'mobile'   => $phone,
+			'location' => $location,
+			'aboutMe'  => $about,
+			'address'  => $address,
+		];
 
-				$adminDetail = Admin::getAdminDetail( $adminId , null ,null );
-				// dd($adminDetail);
-				return view('Admin/editProfile' , compact('adminDetail'));
+		if( !empty($photo) ) {
+			$AdminDetail = Admin::getAdminDetail( $adminId , null ,null );
+			if( !empty($AdminDetail->photo) &&  file_exists(public_path().'/'.'adminImages/'.$AdminDetail->photo) ){
+				unlink(public_path().'/'.'adminImages/'.$AdminDetail->photo);
 			}
-		} else if( $request->method() == 'POST' ) {
-			$validations = [
-				'email'=> 'required|email',
-				'phone'=> 'required|numeric',
-				'location' => 'required',
-				'aboutMe' => 'required',
-				'address' => 'required',
+			$fileName = time()."_".$photo->getClientOriginalName();
+			$photo->move( $destinationPathOfProfile , $fileName );
+			$AdminDetail = [ 
+				'mobile'    => $phone,
+				'location' => $location,
+				'aboutMe'  => $about,
+				'address'  => $address,
+				'photo'    => $fileName
 			];
-			$messages = [
-			    'email.required' => 'please enter email address!',
-			];
-			$validator = Validator::make($request->all() , $validations, $messages );
-			if( $validator->fails() ) {
-				return redirect('Admin/editProfile')->withErrors( $validator )->withInput();
-			} else {
-				$AdminDetail = [ 
-					'mobile'   => $phone,
-					'location' => $location,
-					'aboutMe'  => $aboutMe,
-					'address'  => $address,
-				];
-
-				if( !empty($photo) ) {
-					$AdminDetail = Admin::getAdminDetail( $adminId , null ,null );
-					// dd($AdminDetail);
-					if( !empty($AdminDetail->photo) &&  file_exists(public_path().'/'.'adminImages/'.$AdminDetail->photo) ){
-						unlink(public_path().'/'.'adminImages/'.$AdminDetail->photo);
-					}
-					$fileName = time()."_".$photo->getClientOriginalName();
-					// dd($fileName);
-					$photo->move( $destinationPathOfProfile , $fileName );
-
-					$AdminDetail = [ 
-						// 'email'    => $email,
-						'mobile'    => $phone,
-						'location' => $location,
-						'aboutMe'  => $aboutMe,
-						'address'  => $address,
-						'photo'    => $fileName
-					];
-				}
-				Admin::updateAdminDetail( $AdminDetail , $adminId );
-				return redirect('Admin/editProfile')->with( 'profileUpdated' , 'Profile updated successfully.');
+			Admin::updateAdminDetail($AdminDetail,$adminId);
+			$adminDetail = Admin::getAdminDetail( $adminId , null ,null );
+			$photo = null;
+			if($adminDetail->photo){
+				$photo = url('').'/'.'adminImages/'.$adminDetail->photo;
 			}
-		} else {
-			return view('Admin/login');
+			$result = [
+				'id' => $adminDetail->id,
+				'name' => $adminDetail->name,
+				'email' => $adminDetail->email,
+				'photo' => $photo,
+				'mobile' => $adminDetail->mobile,
+				'location' => $adminDetail->location,
+				'aboutMe' => $adminDetail->aboutMe,
+				'address' => $adminDetail->address,
+				'password' => $adminDetail->password,
+				'type' => $adminDetail->type,
+				'status' => $adminDetail->status,
+			];
+
+			$response = [
+				'message' => 'Profile updated successfully',
+				'response' => $result
+			];
+			return response()->json($response,200);
+		}else{
+			Admin::updateAdminDetail($AdminDetail,$adminId);
+			$adminDetail = Admin::getAdminDetail( $adminId , null ,null );
+			$photo = null;
+			if($adminDetail->photo){
+				$photo = url('').'/'.'adminImages/'.$adminDetail->photo;
+			}
+			$result = [
+				'id' => $adminDetail->id,
+				'name' => $adminDetail->name,
+				'email' => $adminDetail->email,
+				'photo' => $photo,
+				'mobile' => $adminDetail->mobile,
+				'location' => $adminDetail->location,
+				'aboutMe' => $adminDetail->aboutMe,
+				'address' => $adminDetail->address,
+				'password' => $adminDetail->password,
+				'type' => $adminDetail->type,
+				'status' => $adminDetail->status,
+			];
+
+			// return $adminDetail;
+
+			$response = [
+				'message' => 'Profile updated successfully',
+				'response' => $result
+			];
+			return response()->json($response,200);
 		}
 	}
 
@@ -204,26 +231,26 @@ class AdminController extends Controller
 
 	// Block or Unblock customer from admin panel
 	public function update_user_status( Request $request ) {
-		$AdminloggedIn = Session::get( 'AdminloggedIn' );
-		$adminId = Session::get('AdminId');
-		$adminDetail = Admin::getAdminDetail( $adminId ,null , null);
-		$user_id = $request->user_id;
+		$user_id = $request->userId;
 		$status = $request->status;
-		if( !empty( $AdminloggedIn ) ) {
-			$user = User::find($user_id); 
-			if($user && $user->user_type == 1){
-				$user->status = $status;
-				$user->save();
-				if($status == 1){
-					return redirect('/Admin/user_list')->with('user_unblocked','User Unblocked Successfully.');
-				}else{
-					return redirect('/Admin/user_list')->with('user_blocked','User Blocked Successfully.');
-				}
+		$user = User::find($user_id); 
+		if($user && $user->user_type == 1){
+			$user->status = $status;
+			$user->save();
+			if($status == 1){
+				$response = [
+					'message' => 'user Unblock successfully.',
+				];
+				return response()->json($response,200);
 			}else{
-				dd('invalid request');
+				$response = [
+					'message' => 'user Blocked successfully.',
+				];
+				return response()->json($response,200);
 			}
-		} else {
-			return redirect('Admin/login');
+			
+		}else{
+			dd('invalid request');
 		}
 	}
 

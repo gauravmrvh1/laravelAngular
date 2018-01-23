@@ -9,7 +9,7 @@
                     <img class="profile-avetar-img" width="128" height="128" src="/AdminPanel/img/0180441436.jpg" alt="Teddy Wilson">
                   </div>
                   <div class="profile-overview">
-                    <h1 class="profile-name admin_name">TeddyWilson</h1>
+                    <h1 class="profile-name admin_name" ng-bind="admin_name">TeddyWilson</h1>
                
                     <p class="admin_desc"></p>
                   </div>
@@ -154,7 +154,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-md-12">
-             <a href="edit-profile" class="">       
+             <a href="#/edit-profile" class="">       
               <button class="btn btn-primary btn-sm pull-right" type="button">Edit profile</button> 
              </a>
              <a href="#/change-password" >       
