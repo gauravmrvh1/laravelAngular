@@ -36,46 +36,88 @@ app.controller('profile',['$scope','API_URL','$rootScope','$http','$window','$ro
 			$scope.profile_photo = value;
 		}
 
+		$scope.LoginValidator = function ($event) {
+		    $event.preventDefault();
+		    console.log($scope.LoginForm.$valid);
+		    if($scope.LoginForm.$valid){
+		      console.log("valid");
+		    }else{
+		      console.log("invalid");
+		      console.log($scope.LoginForm.$error.require);
+		      console.log($scope.LoginForm.Email.$empty);
+		      if($scope.LoginForm.Email.$invalid){
+		        $scope.mailRequire = true;
+		      }
+		      /*if($scope.LoginForm.password.$invalid){
+		        $scope.passRequire = true;
+		      }*/
+		    }
+    	};
 
-		$scope.update_profile = function(){
-			console.log('---------------------------Update Profile -------------------------------------------');
-			console.log($scope.admin_email);
-			var admin_email = $scope.admin_email;
-			var admin_phone = $scope.admin_phone;
-			var admin_location = $scope.admin_location;
-			var admin_about = $scope.admin_about;
-			var admin_address = $scope.admin_address;
-			var profile = $scope.profile;
 
-			var fd = new FormData;
-			fd.append('email', $scope.admin_email);
-        	fd.append('phone', $scope.admin_phone);
-        	if($scope.profile_photo != undefined){
-				fd.append('photo', $scope.profile_photo);
-			}
-			fd.append('location',$scope.admin_location);
-			fd.append('address',$scope.admin_address);
-			fd.append('about',$scope.admin_about);
-			fd.append('admin_id', $rootScope.adminDetails.id);
+		$scope.update_profile = function(event){
+			event.preventDefault();
+			console.log($scope.EditProfile.$valid);
+			if($scope.EditProfile.$valid){
+		      console.log('---------------------------Update Profile -------------------------------------------');
+				console.log($scope.admin_email);
+				var admin_email = $scope.admin_email;
+				var admin_phone = $scope.admin_phone;
+				var admin_location = $scope.admin_location;
+				var admin_about = $scope.admin_about;
+				var admin_address = $scope.admin_address;
+				var profile = $scope.profile;
 
-        	$http.post(API_URL + 'api/editProfile' , fd ,{headers: { 'Content-Type': undefined}} )
-        		.then(function(response){
-        			console.log(response);
-        			if(response.status == 200 ){
-        				alert(response.data.message);
-        				localStorage.setItem('Mai',JSON.stringify(response.data.response));
-        				console.log('+++++++++++++++++++++++++'+response.data.response.photo);
-        				if(response.data.response.photo != null ){
+				var fd = new FormData;
+				fd.append('email', $scope.admin_email);
+	        	fd.append('phone', $scope.admin_phone);
+	        	if($scope.profile_photo != undefined){
+					fd.append('photo', $scope.profile_photo);
+				}
+				fd.append('location',$scope.admin_location);
+				fd.append('address',$scope.admin_address);
+				fd.append('about',$scope.admin_about);
+				fd.append('admin_id', $rootScope.adminDetails.id);
+
+	        	$http.post(API_URL + 'api/editProfile' , fd ,{headers: { 'Content-Type': undefined}} )
+	     		.then(function(response){
+	     			console.log(response);
+	     			if(response.status == 200 ){
+	     				alert(response.data.message);
+	     				localStorage.setItem('Mai',JSON.stringify(response.data.response));
+	     				console.log('+++++++++++++++++++++++++'+response.data.response.photo);
+	     				if(response.data.response.photo != null ){
 							$scope.admin_image = $rootScope.adminDetails.photo;
-        				}
-        				console.log($scope.adminProfileShow);
-        				console.log(localStorage.getItem('Mai'));
-        				$rootScope.adminDetails = response.data.response;
-        				$window.location.reload();
-        			}
-        		},function myError(){
+	     				}
+	     				console.log($scope.adminProfileShow);
+	     				console.log(localStorage.getItem('Mai'));
+	     				$rootScope.adminDetails = response.data.response;
+	     				$window.location.reload();
+	     			}
+	     		},function myError(){
 
-        		});
+	     		});
+			}else{
+				console.log("invalid");
+				console.log('+++++++++++++++++++++++++++++++++++++');
+				console.log($scope.EditProfile.admin_phone.$error.pattern);
+				console.log($scope.EditProfile.admin_phone.$invalid);
+
+				console.log($scope.EditProfile.admin_phone.$error.required);
+				if($scope.EditProfile.admin_phone.$error.required){
+					$scope.admin_phone_err = true;
+					$scope.admin_phone_pattern_err = false;
+				}
+
+				if($scope.EditProfile.admin_phone.$error.pattern){
+					$scope.admin_phone_pattern_err = true;
+					$scope.admin_phone_err = false;
+				}
+
+				
+			}
+			
+			
 		}
 		
 	}]);
