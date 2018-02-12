@@ -66,6 +66,9 @@ Route::group(['middleware'=>['ApiAuthentication']],function(){
 	Route::post('sort_data','UserPanelController@sort_data');
 });
 
+
+Route::post('save_QR_Image','UserPanelController@save_QR_Image');
+
 ///////////////////////////////////////////
 /////
 //////////////////////////////////////////
@@ -73,3 +76,21 @@ Route::group(['middleware'=>['ApiAuthentication']],function(){
 Route::post('get_city_under_country','CountryController@get_city_uder_country');
 Route::post('get_area_uder_city','CountryController@get_area_uder_city');
 Route::post('store_detail','UserPanelController@store_detail');
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////// Testing Routes
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+Route::post('soft_delete','TestController@soft_delete');
+Route::post('user_list_without_trashed','TestController@user_list_without_trashed');
+Route::post('user_list_with_trashed','TestController@user_list_with_trashed');
+Route::post('user_list_only_trashed','TestController@user_list_only_trashed');
+Route::post('restore_deleted_user','TestController@restore_deleted_user');
